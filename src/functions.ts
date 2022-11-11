@@ -1,4 +1,4 @@
-import { IDayObject, IMonthObject, IWeeks } from "./interfaces";
+import { IDayObject, IMonthObject, IWeeks, IWeeksOnMonths } from "./interfaces";
 
 const createDayObject = (year: number): Function => {
   const date = new Date(year, 0, 1);
@@ -52,15 +52,26 @@ export const createMonthObject = (year: number) => {
   };
 };
 
+const weekMonthFilter = (month: Number) => (week: IDayObject[]) =>
+  week.some((day: IDayObject) => day.month === month);
+
 export const createYearObject = (year: number) => {
   const months = new Array(12)
     .fill(0)
     .map((_, i) => createMonthObject(year)(i));
 
+  const weeks = getWeeksOfYear(months);
+
+  const weeksOnMonths: IWeeksOnMonths | any = {} as IWeeksOnMonths;
+  for (let i = 0; i < 12; i++) {
+    weeksOnMonths[i] = weeks.filter(weekMonthFilter(i));
+  }
+
   return {
     year,
     months,
-    weeks: getWeeksOfYear(months),
+    weeks,
+    weeksOnMonths,
   };
 };
 

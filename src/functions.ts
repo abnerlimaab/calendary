@@ -1,4 +1,4 @@
-import { IDayObject, IMonthObject, IWeeks } from "./interfaces";
+import { IDayObject, IMonthObject, IWeeks, IYearObject } from "./interfaces";
 
 const createDayObject = (year: number): Function => {
   const date = new Date(year, 0, 1);
@@ -75,8 +75,12 @@ export const createYearObject = (year: number) => {
   };
 };
 
-export const createCalendarObject = (yearStart: number, yearEnd?: number) => ({
-  years: new Array(yearEnd ? yearEnd - yearStart + 1 : 1)
-    .fill(0)
-    .map((_, i) => createYearObject(i + yearStart)),
-});
+export const createCalendarObject = (yearStart: number, yearEnd?: number) => {
+  const years: IYearObject[] = [];
+
+  for (let i = yearStart; i <= (yearEnd || yearStart); i++) {
+    years[i] = createYearObject(i);
+  }
+
+  return years;
+};

@@ -21,7 +21,3 @@ export interface IYearObject {
   weeks: IWeeks;
   weeksOnMonths: IWeeks[];
 }
-
-export interface ICalendar {
-  years: IYearObject[];
-}

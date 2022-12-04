@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { createYearObject } from "./functions";
+
 import Month from "./components/Month";
 
 import { IYearObject } from "./interfaces";
+import { createYearObject } from "./functions";
 
 function App() {
   const [year, setYear] = useState(0);
@@ -59,7 +60,7 @@ function App() {
 
   const getWeeks = (month: number) =>
     years[year]?.weeks?.filter((week) =>
-      week.some((day) => day.month === month)
+      week.some((day) => day.month === month && day.year === year)
     );
 
   useEffect(() => {

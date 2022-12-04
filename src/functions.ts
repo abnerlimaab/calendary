@@ -19,8 +19,22 @@ const createDayObject = (year: number): Function => {
   };
 };
 
+const getExtraDaysOnWeekAtStartOfYear = (firstDay: IDayObject) =>
+  createMonthObject(firstDay.year - 1)(11).days.slice(-firstDay.weekDay);
+
+const getExtraDaysOnWeekAtEndOfYear = (lastDay: IDayObject) =>
+  createMonthObject(lastDay.year + 1)(0).days.slice(0, 6 - lastDay.weekDay);
+
 const getWeeksOfYear = (months: IMonthObject[]): IWeeks => {
   const days = months.flatMap((month) => month.days);
+
+  if (days[0].weekDay !== 0) {
+    days.unshift(...getExtraDaysOnWeekAtStartOfYear(days[0]));
+  }
+
+  if (days[days.length - 1].weekDay !== 6) {
+    days.push(...getExtraDaysOnWeekAtEndOfYear(days[days.length - 1]));
+  }
 
   return days.reduce((weeks: IWeeks, day: IDayObject) => {
     if (day.weekDay === 0 || weeks.length === 0) {
